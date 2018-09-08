@@ -11,15 +11,7 @@ class HomePageTest(TestCase):
 
     # 确认当前'/' 对应的views 函数是 home_page
     def test_root_url_resolve_to_home_page_view(self):
-        found = resolve('/lists/')
-        self.assertEqual(found.func, home_page)
-
-    def test_home_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = home_page(request).content.decode().strip()
-
-        self.assertTrue(response.startswith('<!DOCTYPE html>'))
-        self.assertIn('<title>To-Do lists</title>', response)
-        self.assertTrue(response.endswith('</html>'))
+        response = self.client.get('/lists/')
+        self.assertTemplateUsed(response, 'lists/home_page.html')
 
 
