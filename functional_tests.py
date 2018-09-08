@@ -12,7 +12,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_title(self):
         self.browser.get('http://localhost:8000')
-        self.assertIn('Django', self.browser.title)
+        self.assertIn('To-Do', self.browser.title)
 
 
 if __name__ == '__main__':
