@@ -42,7 +42,7 @@ class HomePageTest(TestCase):
         )
         response = self.client.post('/lists/', data=data)
 
-        self.assertRedirects(response, '/lists/only_one_list_in_the_world')
+        self.assertRedirects(response, '/lists/only_one_list_in_the_world/')
 
     def test_only_save_items_when_necessary(self):
         self.client.get('/lists/')
@@ -80,6 +80,17 @@ class ItemModelTest(TestCase):
 
         saved_item1 = Item.objects.get(pk=1)
         self.assertEqual(item_1.text, saved_item1.text)
+
+
+class ListViewTest(TestCase):
+    def test_displays_all_items(self):
+        item1 = Item.objects.create(text="todo1")
+        item2 = Item.objects.create(text="todo2")
+
+        response = self.client.get('/lists/only_one_list_in_the_world/')
+
+        self.assertContains(response, item1.text)
+        self.assertContains(response, item2.text)
 
 
 

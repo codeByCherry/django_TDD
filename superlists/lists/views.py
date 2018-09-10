@@ -12,10 +12,23 @@ def home_page(request):
         item_text = request.POST['item_text']
         Item.objects.create(text=item_text)
         #return redirect('/lists/')
-        return redirect('/lists/only_one_list_in_the_world')
+        return redirect(reverse('lists:view_list'))
     else:
         items = Item.objects.all()
         context = dict(
             items=items,
         )
         return render(request, 'lists/home_page.html', context=context)
+
+
+def view_list(request):
+    if request.method == "POST":
+        item_text = request.POST['item_text']
+        Item.objects.create(text=item_text)
+        return redirect(reverse('lists:view_list'))
+
+    items = Item.objects.all()
+    context = dict(
+        items = items,
+    )
+    return render(request, 'lists/view_list.html', context)

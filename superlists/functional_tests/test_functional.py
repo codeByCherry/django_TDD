@@ -53,8 +53,8 @@ class NewVisitorTest(LiveServerTestCase):
         input_box.send_keys(todo2)
         input_box.send_keys(Keys.ENTER)
 
-        self.check_for_row_in_list_table(todo1,1)
-        self.check_for_row_in_list_table(todo2,2)
+        self.check_for_row_in_list_table(todo1, 1)
+        self.check_for_row_in_list_table(todo2, 2)
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url+'/lists/')
