@@ -8,12 +8,7 @@ from django.urls import reverse
 
 # Create your views here.
 def home_page(request):
-    if request.method == "POST":
-        item_text = request.POST['item_text']
-        Item.objects.create(text=item_text)
-        return redirect(reverse('lists:view_list'))
-    else:
-        return render(request, 'lists/home_page.html')
+    return render(request, 'lists/home_page.html')
 
 
 def view_list(request):
@@ -27,3 +22,9 @@ def view_list(request):
         items = items,
     )
     return render(request, 'lists/view_list.html', context)
+
+
+def add_item(request):
+    item_text = request.POST['item_text']
+    Item.objects.create(text=item_text)
+    return redirect(reverse('lists:view_list'))
