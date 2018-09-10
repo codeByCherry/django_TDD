@@ -43,7 +43,7 @@ class HomePageTest(TestCase):
         )
         response = self.client.post('/lists/', data=data)
 
-        self.assertRedirects(response, '/lists/')
+        self.assertRedirects(response, '/lists/only_one_list_in_the_world')
 
     def test_only_save_items_when_necessary(self):
         self.client.get('/lists/')
