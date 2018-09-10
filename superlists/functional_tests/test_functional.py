@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 import time
 from django.test import LiveServerTestCase
 
@@ -15,8 +16,16 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
-        table_text = self.browser.find_element_by_id('id_list_table').text
-        self.assertIn(row_text, table_text)
+        start_time = time.time()
+        while True:
+            try:
+                table_text = self.browser.find_element_by_id('id_list_table').text
+                self.assertIn(row_text, table_text)
+                return
+            except(AssertionError, WebDriverException) as e:
+                if time.time() - start_time >= MAX_SECONDS:
+                    raise e
+                time.sleep(0.2)
 
     def test_title(self):
         self.browser.get(self.live_server_url+'/lists/')
@@ -36,7 +45,6 @@ class NewVisitorTest(LiveServerTestCase):
         todo1 = '##test1'
         input_box.send_keys(todo1)
         input_box.send_keys(Keys.ENTER)
-        time.sleep(0.5)
 
         self.check_for_row_in_list_table(f'1:{todo1}')
 
@@ -44,7 +52,6 @@ class NewVisitorTest(LiveServerTestCase):
         input_box = self.browser.find_element_by_id('id_new_item')
         input_box.send_keys(todo2)
         input_box.send_keys(Keys.ENTER)
-        time.sleep(0.5)
 
         self.check_for_row_in_list_table(f'1:{todo1}')
         self.check_for_row_in_list_table(f'2:{todo2}')
