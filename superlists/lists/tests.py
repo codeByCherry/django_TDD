@@ -23,27 +23,6 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'lists/home_page.html')
         self.assertContains(response, '<title>To-Do lists</title>')
 
-    # TODO:: 不要把写测试和读测试放在一个单元测试中！记得拆分这个测试
-    def test_can_save_a_POST_request(self):
-        # 发送一个 post请求被那个携带数据
-        data = dict(
-            item_text='todo1',
-        )
-
-        self.client.post('/lists/', data=data)
-        # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
-        self.assertEqual(Item.objects.count(), 1)
-
-        saved_item = Item.objects.first()
-        self.assertEqual(saved_item.text, data['item_text'])
-
-    def test_redirect_after_POST(self):
-        data = dict(
-            item_text='todo1',
-        )
-        response = self.client.post('/lists/', data=data)
-
-        self.assertRedirects(response, '/lists/only_one_list_in_the_world/')
 
     def test_only_save_items_when_necessary(self):
         self.client.get('/lists/')
@@ -97,6 +76,23 @@ class ListViewTest(TestCase):
         self.assertContains(response, item1.text)
         self.assertContains(response, item2.text)
 
+    def test_can_save_a_POST_request(self):
+        # 发送一个 post请求被那个携带数据
+        data = dict(
+            item_text='todo1',
+        )
 
+        self.client.post('/lists/', data=data)
 
+        # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
+        self.assertEqual(Item.objects.count(), 1)
+        saved_item = Item.objects.first()
+        self.assertEqual(saved_item.text, data['item_text'])
 
+    def test_redirect_after_POST(self):
+        data = dict(
+            item_text='todo1',
+        )
+        response = self.client.post('/lists/', data=data)
+
+        self.assertRedirects(response, '/lists/only_one_list_in_the_world/')
