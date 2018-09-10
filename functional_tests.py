@@ -30,14 +30,13 @@ class NewVisitorTest(unittest.TestCase):
                          'Enter a to-do item'
                          )
 
-
         todo1 = '##test1'
         input_box.send_keys(todo1)
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
         content = self.browser.find_element_by_id('id_list_table').text
-        self.assertIn(todo1, content)
+        self.assertIn(f'1:{todo1}', content)
 
 
 if __name__ == '__main__':
