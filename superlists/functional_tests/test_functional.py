@@ -79,6 +79,12 @@ class NewVisitorTest(LiveServerTestCase):
         input_box = self.browser.find_element_by_id('id_new_item')
         input_box.send_keys(user2_item1)
         input_box.send_keys(Keys.ENTER)
+
+        time.sleep(0.2)
+        self.assertNotIn(
+            user1_item,
+            self.browser.find_element_by_id('id_list_table').text,
+        )
         self.check_for_row_in_list_table(user2_item1, 1)
 
         input_box = self.browser.find_element_by_id('id_new_item')
@@ -91,8 +97,5 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertRegex(user2_list_url, '/lists/.+')
         self.assertNotEqual(user1_list_url, user2_list_url)
 
-        self.assertNotIn(
-            user1_item.text,
-            self.browser.find_element_by_tag_name('html').text,
-        )
+
 
