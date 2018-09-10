@@ -31,13 +31,18 @@ class HomePageTest(TestCase):
         )
 
         # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
-        response = self.client.post('/lists/', data=data)
         self.assertEqual(Item.objects.count(), 1)
+
+        saved_item = Item.objects.first()
+        self.assertEqual(saved_item.text, data['item_text'])
+
+    def test_redirect_after_POST(self):
+        data = dict(
+            item_text='todo1',
+        )
+        response = self.client.post('/lists/', data=data)
+
         self.assertRedirects(response, '/lists/')
-        # TODO:: 如何测试 redirect 后页面的数据是否正确？
-        # item = Item.objects.first()
-        # self.assertEqual(item.text, data['item_text'])
-        # self.assertIn(data['item_text'], response.content.decode())
 
     def test_only_save_items_when_necessary(self):
         self.client.get('/lists/')
