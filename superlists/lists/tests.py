@@ -1,7 +1,9 @@
+from .models import Item
+from .views import home_page
+
+from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import resolve
-from .views import home_page
-from django.http import HttpRequest
 
 
 # Create your tests here.
@@ -31,3 +33,40 @@ class HomePageTest(TestCase):
         response = self.client.post('/lists/', data=data)
 
         self.assertIn(data['item_text'], response.content.decode())
+
+
+# 测试 ItemModel
+class ItemModelTest(TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_saving_and_retrieving_items(self):
+        item_1 = Item()
+        item_1.text = 'item1'
+        item_1.save()
+
+        item_2 = Item()
+        item_2.text = 'item2'
+        item_2.save()
+
+        item_3 = Item()
+        item_3.text = 'item3'
+        item_3.save()
+
+        saved_items = Item.objects.all()
+
+        self.assertEqual(saved_items.count(), 3)
+        self.assertIn(item_1.text, [item.text for item in saved_items])
+        self.assertIn(item_2.text, [item.text for item in saved_items])
+        self.assertIn(item_3.text, [item.text for item in saved_items])
+
+        saved_item1 = Item.objects.get(pk=1)
+        self.assertEqual(item_1.text, saved_item1.text)
+
+
+
+
