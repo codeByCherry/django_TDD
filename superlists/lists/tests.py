@@ -16,7 +16,8 @@ class HomePageTest(TestCase):
         pass
 
     # 确认当前'/' 对应的views 函数是 home_page
-    def test_root_url_resolve_to_home_page_view(self):
+    def test_uses_home_page_template(self):
+
         response = self.client.get('/lists/')
 
         self.assertTemplateUsed(response, 'lists/home_page.html')
@@ -83,6 +84,10 @@ class ItemModelTest(TestCase):
 
 
 class ListViewTest(TestCase):
+    def test_uses_correct_template(self):
+        response = self.client.get('/lists/only_one_list_in_the_world/')
+        self.assertTemplateUsed(response, 'lists/view_list.html')
+
     def test_displays_all_items(self):
         item1 = Item.objects.create(text="todo1")
         item2 = Item.objects.create(text="todo2")
