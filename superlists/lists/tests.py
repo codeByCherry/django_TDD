@@ -18,10 +18,9 @@ class HomePageTest(TestCase):
     # 确认当前'/' 对应的views 函数是 home_page
     def test_root_url_resolve_to_home_page_view(self):
         response = self.client.get('/lists/')
-        response_content = response.content.decode()
 
         self.assertTemplateUsed(response, 'lists/home_page.html')
-        self.assertIn('<title>To-Do lists</title>', response_content)
+        self.assertContains(response, '<title>To-Do lists</title>')
 
     # TODO:: 不要把写测试和读测试放在一个单元测试中！记得拆分这个测试
     def test_can_save_a_POST_request(self):
