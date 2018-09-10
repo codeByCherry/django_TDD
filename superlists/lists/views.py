@@ -11,7 +11,8 @@ def home_page(request):
     if request.method == "POST":
         item_text = request.POST['item_text']
         Item.objects.create(text=item_text)
-        return redirect(reverse('lists:home_page'))
+        #return redirect('/lists/')
+        return redirect('/lists/only_one_list_in_the_world')
     else:
         items = Item.objects.all()
         context = dict(
