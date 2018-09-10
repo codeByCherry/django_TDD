@@ -1,4 +1,5 @@
 from .models import Item
+from .models import List
 
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -26,5 +27,6 @@ def view_list(request):
 
 def add_item(request):
     item_text = request.POST['item_text']
-    Item.objects.create(text=item_text)
+    todo_list = List.objects.create()
+    Item.objects.create(text=item_text, todo_list=todo_list)
     return redirect(reverse('lists:view_list'))

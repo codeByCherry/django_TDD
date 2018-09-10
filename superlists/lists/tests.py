@@ -1,4 +1,5 @@
 from .models import Item
+from .models import List
 from .views import home_page
 
 from django.http import HttpRequest
@@ -23,14 +24,13 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'lists/home_page.html')
         self.assertContains(response, '<title>To-Do lists</title>')
 
-
     def test_only_save_items_when_necessary(self):
         self.client.get('/lists/')
         self.assertEqual(Item.objects.count(), 0)
 
 
 # 测试 ItemModel
-class ItemModelTest(TestCase):
+class ListAndItemModelTest(TestCase):
 
     def setUp(self):
         pass
@@ -38,28 +38,27 @@ class ItemModelTest(TestCase):
     def tearDown(self):
         pass
 
-    def test_saving_and_retrieving_items(self):
-        item_1 = Item()
-        item_1.text = 'item1'
-        item_1.save()
+    def test_saving_and_retrieving_list_and_items(self):
+        list_ = List.objects.create()
 
-        item_2 = Item()
-        item_2.text = 'item2'
-        item_2.save()
-
-        item_3 = Item()
-        item_3.text = 'item3'
-        item_3.save()
+        item_1 = Item.objects.create(todo_list=list_, text='item1')
+        item_2 = Item.objects.create(todo_list=list_, text='item2')
+        item_3 = Item.objects.create(todo_list=list_, text='item3')
 
         saved_items = Item.objects.all()
+        saved_list = List.objects.first()
 
         self.assertEqual(saved_items.count(), 3)
+        self.assertEqual(saved_list.item_set.count(), 3)
+
         self.assertIn(item_1.text, [item.text for item in saved_items])
         self.assertIn(item_2.text, [item.text for item in saved_items])
         self.assertIn(item_3.text, [item.text for item in saved_items])
 
         saved_item1 = Item.objects.get(pk=1)
+        saved_item2 = Item.objects.get(pk=2)
         self.assertEqual(item_1.text, saved_item1.text)
+        self.assertEqual(saved_item1.todo_list, saved_item2.todo_list)
 
 
 class ListViewTest(TestCase):
@@ -68,8 +67,9 @@ class ListViewTest(TestCase):
         self.assertTemplateUsed(response, 'lists/view_list.html')
 
     def test_displays_all_items(self):
-        item1 = Item.objects.create(text="todo1")
-        item2 = Item.objects.create(text="todo2")
+        todo_list = List.objects.create()
+        item1 = Item.objects.create(text="todo1", todo_list=todo_list)
+        item2 = Item.objects.create(text="todo2", todo_list=todo_list)
 
         response = self.client.get('/lists/only_one_list_in_the_world/')
 
