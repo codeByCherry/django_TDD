@@ -64,17 +64,14 @@ class NewVisitorTest(LiveServerTestCase):
         input_box.send_keys(Keys.ENTER)
         self.check_for_row_in_list_table(user1_item, 1)
 
-        user1_list = self.browser.current_url
-        self.assertRegex(user1_list, '/lists/.+')
+        user1_list_url = self.browser.current_url
+        self.assertRegex(user1_list_url, '/lists/.+')
 
         ## 这里为了避免缓存的 session 的影响，手动关闭该 browser
         ## 确保一个干净的新 session
         self.browser.quit()
         self.browser = webdriver.Safari()
         self.browser.get(self.live_server_url+'/lists/')
-
-        page_text = self.browser.find_element_by_id('id_list_table').text
-        self.assertNotIn(user1_item, page_text)
 
         user2_item1 = '#user2 item1'
         user2_item2 = '#user2 item2'
@@ -90,7 +87,12 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table(user2_item1, 1)
         self.check_for_row_in_list_table(user2_item2, 2)
 
-        user2_list = self.browser.current_url
-        self.assertRegex(user2_list, '/lists/.+')
-        self.assertNotEqual(user1_list, user2_list)
+        user2_list_url = self.browser.current_url
+        self.assertRegex(user2_list_url, '/lists/.+')
+        self.assertNotEqual(user1_list_url, user2_list_url)
+
+        self.assertNotIn(
+            user1_item.text,
+            self.browser.find_element_by_tag_name('html').text,
+        )
 
