@@ -30,6 +30,7 @@ class HomePageTest(TestCase):
             item_text='todo1',
         )
 
+        self.client.post('/lists/', data=data)
         # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
         self.assertEqual(Item.objects.count(), 1)
 
