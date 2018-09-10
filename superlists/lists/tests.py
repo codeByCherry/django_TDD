@@ -82,7 +82,7 @@ class ListViewTest(TestCase):
             item_text='todo1',
         )
 
-        self.client.post('/lists/', data=data)
+        self.client.post('/lists/new', data=data)
 
         # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
         self.assertEqual(Item.objects.count(), 1)
@@ -93,6 +93,5 @@ class ListViewTest(TestCase):
         data = dict(
             item_text='todo1',
         )
-        response = self.client.post('/lists/', data=data)
-
+        response = self.client.post('/lists/new', data=data)
         self.assertRedirects(response, '/lists/only_one_list_in_the_world/')
