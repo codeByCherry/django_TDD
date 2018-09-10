@@ -1,3 +1,5 @@
+from .models import Item
+
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -9,6 +11,8 @@ def home_page(request):
         context = dict(
             new_item_text=item_text,
         )
+        item = Item(text=item_text)
+        item.save()
     else:
         context = dict()
     return render(request, 'lists/home_page.html', context=context)

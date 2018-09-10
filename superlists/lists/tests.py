@@ -23,6 +23,7 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'lists/home_page.html')
         self.assertIn('<title>To-Do lists</title>', response_content)
 
+    # TODO:: 不要把写测试和读测试放在一个单元测试中！记得拆分这个测试
     def test_can_save_a_POST_request(self):
         # 发送一个 post请求被那个携带数据
         data = dict(
@@ -32,6 +33,9 @@ class HomePageTest(TestCase):
         # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
         response = self.client.post('/lists/', data=data)
 
+        self.assertEqual(Item.objects.count(), 1)
+        item = Item.objects.first()
+        self.assertEqual(item.text, data['item_text'])
         self.assertIn(data['item_text'], response.content.decode())
 
 
