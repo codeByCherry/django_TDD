@@ -15,6 +15,10 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table_text = self.browser.find_element_by_id('id_list_table').text
+        self.assertIn(row_text, table_text)
+
     def test_title(self):
         self.browser.get(LISTS_URL)
         self.assertIn('To-Do', self.browser.title)
@@ -35,8 +39,7 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(0.5)
 
-        content = self.browser.find_element_by_id('id_list_table').text
-        self.assertIn(f'1:{todo1}', content)
+        self.check_for_row_in_list_table(f'1:{todo1}')
 
         todo2 = '##test2'
         input_box = self.browser.find_element_by_id('id_new_item')
@@ -44,10 +47,8 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(0.5)
 
-        content = self.browser.find_element_by_id('id_list_table').text
-        self.assertIn(f'1{todo1}', content)
-        self.assertIn(f'2{todo2}', content)
-
+        self.check_for_row_in_list_table(f'1:{todo1}')
+        self.check_for_row_in_list_table(f'2:{todo2}')
 
 if __name__ == '__main__':
     unittest.main()
