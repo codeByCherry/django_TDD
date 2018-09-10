@@ -10,11 +10,7 @@ from django.urls import reverse
 def home_page(request):
     if request.method == "POST":
         item_text = request.POST['item_text']
-        context = dict(
-            new_item_text=item_text,
-        )
-        item = Item(text=item_text)
-        item.save()
+        Item.objects.create(text=item_text)
         return redirect(reverse('lists:home_page'))
     else:
         items = Item.objects.all()
