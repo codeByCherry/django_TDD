@@ -1,13 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
+from django.test import LiveServerTestCase
 
-LISTS_URL = 'http://localhost:8000/lists/'
 MAX_SECONDS = 5
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Safari()
@@ -20,12 +19,12 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn(row_text, table_text)
 
     def test_title(self):
-        self.browser.get(LISTS_URL)
+        self.browser.get(self.live_server_url+'/lists/')
         self.assertIn('To-Do', self.browser.title)
 
     def test_store_lists_and_can_retrieve_it_later(self):
         # 验证文本中的h1 标签的内容
-        self.browser.get(LISTS_URL)
+        self.browser.get(self.live_server_url+'/lists/')
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
@@ -50,5 +49,3 @@ class NewVisitorTest(unittest.TestCase):
         self.check_for_row_in_list_table(f'1:{todo1}')
         self.check_for_row_in_list_table(f'2:{todo2}')
 
-if __name__ == '__main__':
-    unittest.main()
