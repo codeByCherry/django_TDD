@@ -33,10 +33,20 @@ class NewVisitorTest(unittest.TestCase):
         todo1 = '##test1'
         input_box.send_keys(todo1)
         input_box.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(0.5)
 
         content = self.browser.find_element_by_id('id_list_table').text
         self.assertIn(f'1:{todo1}', content)
+
+        todo2 = '##test2'
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys(todo2)
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(0.5)
+
+        content = self.browser.find_element_by_id('id_list_table').text
+        self.assertIn(f'1{todo1}', content)
+        self.assertIn(f'2{todo2}', content)
 
 
 if __name__ == '__main__':
