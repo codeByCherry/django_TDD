@@ -2,14 +2,16 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 import time
-from django.test import LiveServerTestCase
+#from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 MAX_SECONDS = 5
 
 WINDOW_HEIGHT = 768
 WINDOW_WIDTH = 1024
 
-class NewVisitorTest(LiveServerTestCase):
+
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Safari()
