@@ -14,19 +14,26 @@ def home_page(request):
 
 def view_list(request):
     if request.method == "POST":
+        todo_list = List()
         item_text = request.POST['item_text']
-        Item.objects.create(text=item_text)
+        Item.objects.create(text=item_text, todo_list=todo_list)
         return redirect(reverse('lists:view_list'))
 
     items = Item.objects.all()
     context = dict(
-        items = items,
+        items=items,
     )
     return render(request, 'lists/view_list.html', context)
 
 
-def add_item(request):
-    item_text = request.POST['item_text']
+def new_list(request):
     todo_list = List.objects.create()
-    Item.objects.create(text=item_text, todo_list=todo_list)
+    Item.objects.create(text=request.POST['item_text'], todo_list=todo_list)
     return redirect(reverse('lists:view_list'))
+
+
+# def add_item(request):
+#     item_text = request.POST['item_text']
+#     todo_list = List.objects.create()
+#     Item.objects.create(text=item_text, todo_list=todo_list)
+#     return redirect(reverse('lists:view_list'))
