@@ -6,6 +6,8 @@ from django.test import LiveServerTestCase
 
 MAX_SECONDS = 5
 
+WINDOW_HEIGHT = 768
+WINDOW_WIDTH = 1024
 
 class NewVisitorTest(LiveServerTestCase):
 
@@ -14,6 +16,13 @@ class NewVisitorTest(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def check_input_box_center(self, input_box):
+        self.assertAlmostEqual(
+            input_box.location['x'] + input_box.size['width']*0.5,
+            WINDOW_WIDTH*0.5,
+            delta=10,
+        )
 
     def check_for_row_in_list_table(self, row_text, index=1):
         start_time = time.time()
@@ -96,6 +105,20 @@ class NewVisitorTest(LiveServerTestCase):
         user2_list_url = self.browser.current_url
         self.assertRegex(user2_list_url, '/lists/.+')
         self.assertNotEqual(user1_list_url, user2_list_url)
+
+    def test_layout_and_styling(self):
+        self.browser.get(self.live_server_url+'/lists/')
+        self.browser.set_window_size(WINDOW_WIDTH, WINDOW_HEIGHT)
+        input_box = self.browser.find_element_by_id('id_new_item')
+
+        self.check_input_box_center(input_box)
+
+        input_box.send_keys('todo1')
+        input_box.send_keys(Keys.ENTER)
+        self.check_for_row_in_list_table('todo1')
+
+        input_box = self.browser.find_element_by_id('id_new_item')
+        self.check_input_box_center(input_box)
 
 
 
