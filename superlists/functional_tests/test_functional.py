@@ -8,7 +8,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 MAX_SECONDS = 5
 
 WINDOW_HEIGHT = 768
-WINDOW_WIDTH = 1024
+WINDOW_WIDTH = 1333
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
@@ -23,7 +23,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertAlmostEqual(
             input_box.location['x'] + input_box.size['width']*0.5,
             WINDOW_WIDTH*0.5,
-            delta=40,
+            delta=100,
         )
 
     def check_for_row_in_list_table(self, row_text, index=1):
