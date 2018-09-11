@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 import time
+import os
 #from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
@@ -15,6 +16,12 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Safari()
+
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
+        else:
+            print(f'\nYou can set ip address like "192.168.1.1" to STAGING_SERVER')
 
     def tearDown(self):
         self.browser.quit()
@@ -118,7 +125,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         input_box.send_keys('todo1')
         input_box.send_keys(Keys.ENTER)
         self.check_for_row_in_list_table('todo1')
-
+        self.browser.set_window_size(WINDOW_WIDTH, WINDOW_HEIGHT)
         input_box = self.browser.find_element_by_id('id_new_item')
         self.check_input_box_center(input_box)
 
