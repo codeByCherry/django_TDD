@@ -2,6 +2,7 @@ from .models import Item
 from .models import List
 from .views import home_page
 from .views import new_list
+from .views import view_list
 
 from django.http import HttpRequest
 from django.test import TestCase
@@ -43,6 +44,7 @@ class ListAndItemModelTest(TestCase):
     def test_saving_and_retrieving_list_and_items(self):
         list_ = List.objects.create()
 
+        self.assertEqual(List.objects.count(), 1)
         item_1 = Item.objects.create(todo_list=list_, text='item1')
         item_2 = Item.objects.create(todo_list=list_, text='item2')
         item_3 = Item.objects.create(todo_list=list_, text='item3')
@@ -65,14 +67,10 @@ class ListAndItemModelTest(TestCase):
 
 class ListViewTest(TestCase):
     def test_uses_correct_template(self):
-        # todo_list = List.objects.create()
-        # item1 = Item.objects.create(text="##1", todo_list=todo_list)
-        # item2 = Item.objects.create(text="##2", todo_list=todo_list)
-        #response = self.client.get(f'/lists/{todo_list.id}/')
-        response = self.client.get(reverse('lists:view_list'))
+        todo_list = List.objects.create()
+        response = self.client.get(f'/lists/{todo_list.id}/')
         self.assertTemplateUsed(response, 'lists/view_list.html')
 
-    # TODO::修改测试，使得只显示本清单下的待办事项
     def test_show_correct_items_in_the_list(self):
         todo_list = List.objects.create()
         item1 = Item.objects.create(text="todo1", todo_list=todo_list)
@@ -96,7 +94,6 @@ class ListViewTest(TestCase):
 
         self.client.post(reverse('lists:new_list'), data=data)
 
-        # 这里的 post 操作可以认为将发送请求到处理请求(包括页面跳转)一个原子操作。
         self.assertEqual(Item.objects.count(), 1)
         saved_item = Item.objects.first()
         self.assertEqual(saved_item.text, data['item_text'])
@@ -106,4 +103,4 @@ class ListViewTest(TestCase):
             item_text='todo1',
         )
         response = self.client.post('/lists/new', data=data)
-        self.assertRedirects(response, '/lists/only_one_list_in_the_world/')
+        self.assertRedirects(response, '/lists/1/')
