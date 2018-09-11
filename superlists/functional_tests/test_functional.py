@@ -23,7 +23,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertAlmostEqual(
             input_box.location['x'] + input_box.size['width']*0.5,
             WINDOW_WIDTH*0.5,
-            delta=10,
+            delta=40,
         )
 
     def check_for_row_in_list_table(self, row_text, index=1):
