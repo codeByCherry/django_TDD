@@ -1,4 +1,4 @@
-# 将本文件cp到 /etc/nginx/sites-available 然后在 sites-enable 中创建本文件的连接 ln -s
+# 将本文件cp到 /etc/nginx/sites-available 然后在 sites-enable 中创建本文件的连接 ln -s 。注意nginx 有两种配置方式，这种是通过配置 port，另外一种是配置 unix socket。
 server {
   listen 80;
   server_name www.oocoding.com;

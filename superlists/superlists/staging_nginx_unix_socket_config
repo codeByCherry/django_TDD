@@ -1,0 +1,15 @@
+# 将本文件cp到 /etc/nginx/sites-available 然后在 sites-enable 中创建本文件的连接 ln -s 。
+server {
+  listen 80;
+  server_name www.oocoding.com;
+
+  location /static{
+    alias /home/tony/sites/staging.superlists.com/django_TDD/static;
+  }
+
+  location / {
+    proxy_set_header Host $host;
+    # 使用 unix socket
+    proxy_pass http://unix:tmp/superlist-staging.socket;
+  }
+}
