@@ -27,8 +27,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     'www.oocoding.com',
-    '127.0.0.1',
-    '66.42.62.36',
+    'localhost'
 ]
 
 
