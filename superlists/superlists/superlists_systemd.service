@@ -1,0 +1,15 @@
+将本文件 cp 到 /etc/systemd/system/ 路径下并删除本行
+
+[Unit]
+Description = 当服务器重启的时候自动通过 gunicorn 启动 superlists 这个web 服务器
+
+[Service]
+Restart=on-failure
+User=tony
+WorkingDirectory=/home/tony/sites/staging.superlists.com/django_TDD/superlists
+ExecStart=/home/tony/sites/.env/bin/gunicorn \
+    --bind unix:tmp/superlist-staging.socket \
+    superlist.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
